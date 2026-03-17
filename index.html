@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SOE! Portfolio</title>
+  <style>
+    :root {
+      --bg: #000000;
+      --text: #f5f5f5;
+      --muted: rgba(255,255,255,0.68);
+      --line: rgba(255,255,255,0.38);
+      --card: rgba(255,255,255,0.03);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    img { display: block; width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+
+    .container {
+      width: min(1280px, calc(100% - 48px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(10px);
+      background: rgba(0,0,0,0.82);
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 26px 0 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .nav {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .nav a {
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.55);
+      transition: color .25s ease;
+    }
+
+    .nav a:hover,
+    .nav a.active {
+      color: white;
+      font-weight: 700;
+    }
+
+    section {
+      padding: 88px 0 32px;
+      scroll-margin-top: 92px;
+    }
+
+    .section-head {
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 10px;
+      margin-bottom: 28px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      line-height: 0.95;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .hero-grid,
+    .about-grid,
+    .film-grid,
+    .contact-grid {
+      display: grid;
+      gap: 36px;
+    }
+
+    .hero-grid { grid-template-columns: 1.15fr 0.85fr; align-items: end; }
+    .about-grid { grid-template-columns: 0.9fr 1.1fr; align-items: start; }
+    .film-grid { grid-template-columns: 1.05fr 0.95fr; align-items: start; }
+    .contact-grid { grid-template-columns: 0.9fr 1.1fr; align-items: end; }
+
+    .frame {
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: var(--card);
+    }
+
+    .hero-image,
+    .wide-banner,
+    .portrait-image,
+    .contact-image {
+      width: 100%;
+      object-fit: cover;
+      background: #111;
+    }
+
+    .hero-image { aspect-ratio: 16 / 10; }
+    .portrait-image { aspect-ratio: 4 / 5; }
+    .wide-banner { aspect-ratio: 16 / 5; }
+    .contact-image { aspect-ratio: 16 / 11; opacity: 0.34; }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+      padding-top: 22px;
+      border-top: 1px solid rgba(255,255,255,0.10);
+    }
+
+    .meta-label {
+      margin-bottom: 10px;
+      font-size: 0.72rem;
+      letter-spacing: 0.24em;
+      color: var(--muted);
+    }
+
+    .meta-value {
+      color: #fff;
+      line-height: 1.8;
+    }
+
+    .lead {
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      line-height: 1.8;
+      color: rgba(255,255,255,0.86);
+    }
+
+    .about-title,
+    .contact-title {
+      margin: 0 0 18px;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: clamp(3rem, 5.2vw, 5.8rem);
+      line-height: 0.98;
+      letter-spacing: -0.04em;
+    }
+
+    .body-copy {
+      margin: 0;
+      color: rgba(255,255,255,0.80);
+      font-size: 1.05rem;
+      line-height: 1.95;
+    }
+
+    .stats p,
+    .film-info p {
+      margin: 0 0 10px;
+      color: rgba(255,255,255,0.88);
+      font-size: 1.08rem;
+      line-height: 1.7;
+    }
+
+    .stats strong,
+    .film-info strong {
+      margin-right: 12px;
+      color: #fff;
+    }
+
+    .cta-link {
+      display: inline-block;
+      margin-top: 18px;
+      font-size: 0.82rem;
+      letter-spacing: 0.26em;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    .synopsis-box {
+      border: 1px solid rgba(255,255,255,0.10);
+      padding: 24px;
+      background: rgba(255,255,255,0.02);
+    }
+
+    .synopsis-box h4 {
+      margin: 0 0 16px;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .synopsis-box p {
+      margin: 0;
+      color: rgba(255,255,255,0.78);
+      line-height: 1.9;
+    }
+
+    .cards {
+      display: grid;
+      gap: 24px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .archive-grid {
+      display: grid;
+      gap: 24px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .card {
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.02);
+      overflow: hidden;
+      transition: transform .3s ease;
+    }
+
+    .card:hover { transform: translateY(-4px); }
+
+    .card-image {
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+      background: #111;
+    }
+
+    .card-body {
+      padding: 18px;
+    }
+
+    .card-title {
+      margin: 0 0 10px;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: clamp(2rem, 3vw, 3rem);
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    .card-copy {
+      margin: 0;
+      color: rgba(255,255,255,0.74);
+      line-height: 1.85;
+      font-size: 0.98rem;
+    }
+
+    .contact-block {
+      padding-top: 18px;
+    }
+
+    .contact-name {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 22px;
+    }
+
+    .contact-list {
+      display: grid;
+      gap: 14px;
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.92);
+    }
+
+    .contact-panel {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.03);
+      min-height: 360px;
+    }
+
+    .contact-panel-inner {
+      position: absolute;
+      inset: 0;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .contact-panel-brand {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: clamp(4.5rem, 9vw, 7rem);
+      line-height: 0.9;
+      margin-bottom: 16px;
+      letter-spacing: -0.05em;
+    }
+
+    .contact-panel-copy {
+      max-width: 560px;
+      color: rgba(255,255,255,0.82);
+      line-height: 1.9;
+      font-size: 1.05rem;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .8s ease, transform .8s ease;
+    }
+
+    .reveal.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .img-note {
+      margin-top: 10px;
+      color: rgba(255,255,255,0.45);
+      font-size: 0.82rem;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 1100px) {
+      .hero-grid,
+      .about-grid,
+      .film-grid,
+      .contact-grid,
+      .cards,
+      .archive-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .meta-grid { grid-template-columns: 1fr 1fr 1fr; }
+    }
+
+    @media (max-width: 760px) {
+      .container { width: min(100% - 28px, 1280px); }
+      .nav { gap: 14px; }
+      .nav a { font-size: 0.82rem; }
+      .meta-grid { grid-template-columns: 1fr; }
+      .contact-name { font-size: 1.6rem; }
+      .contact-list { font-size: 1rem; }
+      .contact-panel-inner { padding: 22px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a href="#home" class="brand">SOE!</a>
+      <nav class="nav" id="nav">
+        <a href="#home">HOME</a>
+        <a href="#about">ABOUT</a>
+        <a href="#film">FILM</a>
+        <a href="#animation">ANIMATION</a>
+        <a href="#commercial">COMMERCIAL</a>
+        <a href="#works">WORKS</a>
+        <a href="#contact">CONTACT</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section id="home" class="container">
+      <div class="section-head reveal"><h2>WORKS</h2></div>
+      <div class="hero-grid">
+        <div class="reveal">
+          <div class="frame">
+            <!-- 나중에 여기 src만 바꾸면 됨 -->
+            <img class="hero-image" src="assets/home-hero.jpg" alt="HOME HERO" />
+          </div>
+          <p class="img-note">이미지 교체: assets/home-hero.jpg</p>
+        </div>
+
+        <div>
+          <div class="reveal"><p class="lead">현실과 초현실 사이를 오가며, 메시지를 가장 효과적으로 전달하는 시각적 언어를 설계합니다.</p></div>
+          <div class="meta-grid reveal">
+            <div>
+              <div class="meta-label">FOCUS</div>
+              <div class="meta-value">AI Film<br />Fashion Visual</div>
+            </div>
+            <div>
+              <div class="meta-label">STYLE</div>
+              <div class="meta-value">Dreamcore<br />Retro-futurism</div>
+            </div>
+            <div>
+              <div class="meta-label">APPROACH</div>
+              <div class="meta-value">Concept<br />Direction</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="container">
+      <div class="section-head reveal"><h2>ABOUT</h2></div>
+      <div class="about-grid">
+        <div class="reveal">
+          <div class="frame">
+            <img class="portrait-image" src="assets/about-portrait.jpg" alt="ABOUT PORTRAIT" />
+          </div>
+          <p class="img-note">이미지 교체: assets/about-portrait.jpg</p>
+        </div>
+
+        <div>
+          <h3 class="about-title reveal">Driven by Vision,<br />Refined by Direction</h3>
+          <p class="body-copy reveal">
+            AI 영상 기술이 보편화된 지금, 진정한 차별점은 결국 기획과 연출에 있다고 생각합니다.
+            숏폼부터 긴 호흡의 서사까지 장르의 경계 없이 유연하게 작업하며,
+            메시지를 가장 효과적으로 전달할 수 있는 시각적 언어를 고민합니다.
+            현실과 초현실을 넘나드는 감각적인 비주얼로, 보는 이의 시선을 붙잡고 마음을 움직이는 설득력 있는 서사를 완성합니다.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="film" class="container">
+      <div class="section-head reveal"><h2>FILM</h2></div>
+      <div class="reveal">
+        <div class="frame">
+          <img class="wide-banner" src="assets/film-banner.jpg" alt="FILM BANNER" />
+        </div>
+        <p class="img-note">이미지 교체: assets/film-banner.jpg</p>
+      </div>
+
+      <div class="film-grid" style="margin-top: 32px;">
+        <div class="film-info reveal">
+          <h3 class="about-title" style="font-size: clamp(3.4rem, 7vw, 6rem); margin-bottom: 26px;">살(煞);</h3>
+          <p><strong>RUNTIME</strong>7m 38s</p>
+          <p><strong>GENRE</strong>Folk Horror / Thriller</p>
+          <p><strong>FESTIVAL</strong>Submitted to WAiFF 2026</p>
+          <p><strong>FEATURE</strong>Highlight featured on WAiFF official YouTube channel</p>
+          <a class="cta-link" href="#">WATCH FILM ↗</a>
+        </div>
+
+        <div class="synopsis-box reveal">
+          <h4>SYNOPSIS</h4>
+          <p>
+            공포의 실체보다 그것을 믿는 군중의 시선에 주목한 한국 오컬트 AI 단편 영화.
+            조선의 한 마을에서 기이한 존재로 여겨진 아이가 공동체의 두려움과 왜곡된 믿음 속에 희생되고,
+            그 죄의 대가처럼 마을 전체에 비극이 되돌아오는 이야기.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="animation" class="container">
+      <div class="section-head reveal"><h2>ANIMATION</h2></div>
+      <div class="cards">
+        <article class="card reveal">
+          <img class="card-image" src="assets/animation-insomnia.jpg" alt="INSOMNIA" />
+          <div class="card-body">
+            <h3 class="card-title">INSOMNIA</h3>
+            <p class="card-copy">불면증이 만들어내는 심리적 압박을 표현한 작품. 끝없이 이어지는 잡생각과 그것을 지워보려는 마음, 사소한 소리마저 거슬리는 예민함과 시간 속에서 점점 조여오는 답답함을 그려냈다.</p>
+            <a class="cta-link" href="#">WATCH FILM ↗</a>
+          </div>
+        </article>
+
+        <article class="card reveal">
+          <img class="card-image" src="assets/animation-last-string.jpg" alt="THE LAST STRING" />
+          <div class="card-body">
+            <h3 class="card-title">THE LAST STRING</h3>
+            <p class="card-copy">인형과 실의 이미지를 통해 자유와 통제, 존재의 의미를 시적으로 풀어낸 짧은 애니메이션 작업.</p>
+            <a class="cta-link" href="#">WATCH FILM ↗</a>
+          </div>
+        </article>
+      </div>
+      <p class="img-note">이미지 교체: assets/animation-insomnia.jpg / assets/animation-last-string.jpg</p>
+    </section>
+
+    <section id="commercial" class="container">
+      <div class="section-head reveal"><h2>COMMERCIAL</h2></div>
+      <div class="cards">
+        <article class="card reveal">
+          <img class="card-image" src="assets/commercial-velune.jpg" alt="VELUNE" />
+          <div class="card-body">
+            <h3 class="card-title">VELUNE</h3>
+            <p class="card-copy">꿈을 구름으로 형상화하고, 각자가 지닌 구름의 분위기와 감각을 패션으로 표현한 브랜드 캠페인.</p>
+            <a class="cta-link" href="#">VIEW PROJECT ↗</a>
+          </div>
+        </article>
+
+        <article class="card reveal">
+          <img class="card-image" src="assets/commercial-retro.jpg" alt="RETRO FASHION CAMPAIGN" />
+          <div class="card-body">
+            <h3 class="card-title">RETRO CAMPAIGN</h3>
+            <p class="card-copy">레트로 패션과 초현실적인 오브제를 결합해 몽환적인 브랜드 무드를 구축한 비주얼 캠페인.</p>
+            <a class="cta-link" href="#">VIEW PROJECT ↗</a>
+          </div>
+        </article>
+      </div>
+      <p class="img-note">이미지 교체: assets/commercial-velune.jpg / assets/commercial-retro.jpg</p>
+    </section>
+
+    <section id="works" class="container">
+      <div class="section-head reveal"><h2>WORKS</h2></div>
+      <div class="archive-grid">
+        <article class="card reveal">
+          <img class="card-image" src="assets/film-banner.jpg" alt="살(煞);" />
+          <div class="card-body">
+            <h3 class="card-title">살(煞);</h3>
+            <p class="card-copy">한국 오컬트 AI 단편 영화.</p>
+          </div>
+        </article>
+
+        <article class="card reveal">
+          <img class="card-image" src="assets/animation-insomnia.jpg" alt="INSOMNIA" />
+          <div class="card-body">
+            <h3 class="card-title">INSOMNIA</h3>
+            <p class="card-copy">불면의 감각을 표현한 애니메이션 작업.</p>
+          </div>
+        </article>
+
+        <article class="card reveal">
+          <img class="card-image" src="assets/commercial-velune.jpg" alt="VELUNE" />
+          <div class="card-body">
+            <h3 class="card-title">VELUNE</h3>
+            <p class="card-copy">패션 브랜드 비주얼 캠페인.</p>
+          </div>
+        </article>
+      </div>
+      <p class="img-note">이미지 교체: 위에서 사용한 assets 파일들 그대로 재사용 가능</p>
+    </section>
+
+    <section id="contact" class="container" style="padding-bottom: 80px;">
+      <div class="section-head reveal"><h2>CONTACT</h2></div>
+      <div class="contact-grid">
+        <div>
+          <h3 class="contact-title reveal">GET IN TOUCH!</h3>
+          <p class="lead reveal" style="margin-top: 0;">Let’s create something unforgettable.</p>
+
+          <div class="contact-block reveal">
+            <div class="contact-name">CHOI MINJU / SOE!</div>
+            <div class="contact-list">
+              <div>010-6476-7804</div>
+              <div>soezip0001@gmail.com</div>
+              <div>Instagram / Threads : xx_soe.zip</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-panel reveal">
+          <img class="contact-image" src="assets/contact-bg.jpg" alt="CONTACT BACKGROUND" />
+          <div class="contact-panel-inner">
+            <div class="contact-panel-brand">SOE!</div>
+            <p class="contact-panel-copy">Open to creative collaborations, visual campaigns, AI film direction, and narrative-driven image making.</p>
+          </div>
+        </div>
+      </div>
+      <p class="img-note">이미지 교체: assets/contact-bg.jpg</p>
+    </section>
+  </main>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add('show');
+      });
+    }, { threshold: 0.18 });
+
+    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+
+    const navLinks = document.querySelectorAll('.nav a');
+    const sectionEls = [...document.querySelectorAll('main section')];
+
+    const activeObserver = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter(entry => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+      if (!visible) return;
+      const id = visible.target.id;
+      navLinks.forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+      });
+    }, { threshold: [0.2, 0.4, 0.6] });
+
+    sectionEls.forEach(section => activeObserver.observe(section));
+  </script>
+</body>
+</html>
